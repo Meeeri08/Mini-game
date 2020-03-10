@@ -38,8 +38,9 @@ bool Game::Init()
 	//AUDIO
 	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
 	music = Mix_LoadMUS("spaece.ogg");
+	effect1 = Mix_LoadWAV("laser.wav");
 
-	
+
 
 	//Init variables
 	Player.Init(40, WINDOW_HEIGHT / 2, 104, 104, 5);
@@ -55,6 +56,9 @@ bool Game::Init()
 	idx_shot2 = 0;
 	p1hp = 3;
 	p2hp = 3;
+
+	//Music Start
+	Mix_PlayMusic(music, -1);//-1 for loop
 
 	return true;
 }
@@ -102,6 +106,10 @@ void Game::Release()
 	SDL_DestroyTexture(heart);
 	SDL_DestroyTexture(emptyheart);
 	IMG_Quit();
+
+	//Sounds
+	Mix_FreeMusic(music);
+	Mix_FreeChunk(effect1);
 
 	//Clean up all SDL initialized subsystems
 	SDL_Quit();
