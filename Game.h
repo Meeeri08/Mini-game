@@ -35,9 +35,9 @@ private:
 	SDL_Window *Window;
 	SDL_Renderer *Renderer;
 
-	Entity Player, Shotstop[MAX_SHOTS1], Shotsbot[MAX_SHOTS1], Shotsleft[MAX_SHOTS1], Shotsright[MAX_SHOTS1], Player2, Shotstop2[MAX_SHOTS2], Shotsbot2[MAX_SHOTS1], Shotsleft2[MAX_SHOTS2], Shotsright2[MAX_SHOTS2];
+	Entity Player, Shotstop[MAX_SHOTS1], Shotsbot[MAX_SHOTS1], Shotsleft[MAX_SHOTS1], Shotsright[MAX_SHOTS1], Player2, Shotstop2[MAX_SHOTS2], Shotsbot2[MAX_SHOTS1], Shotsleft2[MAX_SHOTS2], Shotsright2[MAX_SHOTS2], Scene;
 	Entity P1hp1, P1hp2, P1hp3, P2hp1, P2hp2, P2hp3;
-	SDL_Texture* player1, * player2, * heart, * emptyheart;
+	SDL_Texture* player1, * player2, * heart, * emptyheart, * bulletup, * bulletdw, * bulletri, * bulletle, * background;
 	Mix_Music* music = NULL;
 	Mix_Chunk* effect1 = NULL;
 

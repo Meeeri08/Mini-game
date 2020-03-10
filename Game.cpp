@@ -38,14 +38,18 @@ bool Game::Init()
 	//AUDIO
 	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
 	music = Mix_LoadMUS("spaece.ogg");
-	effect1 = Mix_LoadWAV("laser.wav");
+	effect1 = Mix_LoadWAV("Assetslaser.wav");
 
 
 
 	//Init variables
 	Player.Init(40, WINDOW_HEIGHT / 2, 104, 104, 5);
 	Player2.Init(WINDOW_WIDTH - 140, WINDOW_HEIGHT / 2, 104, 104, 5);
-	
+
+	int w;
+	SDL_QueryTexture(background, NULL, NULL, &w, NULL);
+	Scene.Init(0, 0, w, WINDOW_HEIGHT, 4);
+
 	P1hp1.Init(0, 850, 50, 50, 0);
 	P1hp2.Init(80, 850, 50, 50, 0);
 	P1hp3.Init(160, 850, 50, 50, 0);
@@ -69,11 +73,11 @@ bool Game::LoadImages()
 		SDL_Log("IMG_Init, failed to init required png support: %s\n", IMG_GetError());
 		return false;
 	}
-	//img_background = SDL_CreateTextureFromSurface(Renderer, IMG_Load("background.png"));
-	/*if (img_background == NULL) {
+	background = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Assets/space.png"));
+	if (background == NULL) {
 		SDL_Log("CreateTextureFromSurface failed: %s\n", SDL_GetError());
 		return false;
-	}*/
+	}
 	player1 = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Assets/Ufo.png"));
 	if (player1 == NULL) {
 		SDL_Log("CreateTextureFromSurface failed: %s\n", SDL_GetError());
@@ -95,6 +99,26 @@ bool Game::LoadImages()
 		SDL_Log("CreateTextureFromSurface failed: %s\n", SDL_GetError());
 		return false;
 	}
+	bulletup = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Assets/terron.png"));
+	if (bulletup == NULL) {
+		SDL_Log("CreateTextureFromSurface failed: %s\n", SDL_GetError());
+		return false;
+	}
+	bulletdw = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Assets/terrondw.png"));
+	if (bulletdw == NULL) {
+		SDL_Log("CreateTextureFromSurface failed: %s\n", SDL_GetError());
+		return false;
+	}
+	bulletle = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Assets/terronle.png"));
+	if (bulletle == NULL) {
+		SDL_Log("CreateTextureFromSurface failed: %s\n", SDL_GetError());
+		return false;
+	}
+	bulletri = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Assets/terronri.png"));
+	if (bulletri == NULL) {
+		SDL_Log("CreateTextureFromSurface failed: %s\n", SDL_GetError());
+		return false;
+	}
 		return true;
 	}
 
@@ -105,6 +129,11 @@ void Game::Release()
 	SDL_DestroyTexture(player1);
 	SDL_DestroyTexture(heart);
 	SDL_DestroyTexture(emptyheart);
+	SDL_DestroyTexture(bulletup);
+	SDL_DestroyTexture(bulletdw);
+	SDL_DestroyTexture(bulletle);
+	SDL_DestroyTexture(bulletri);
+	SDL_DestroyTexture(background);
 	IMG_Quit();
 
 	//Sounds
@@ -387,15 +416,18 @@ void Game::Draw()
 {
 	SDL_Rect rc;
 	
-	
 
 	//Set the color used for drawing operations
 	SDL_SetRenderDrawColor(Renderer, 0, 0, 0, 255);
 	//Clear rendering target
 	SDL_RenderClear(Renderer);
 
+	//Draw BG
+	Scene.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
+	SDL_RenderCopy(Renderer, background, NULL, &rc);
+
 	//Draw players
-	
+
 	Player.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
 	SDL_RenderCopy(Renderer, player1, NULL, &rc);
 
@@ -406,27 +438,26 @@ void Game::Draw()
 
 	P1hp1.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
 	SDL_RenderCopy(Renderer, heart, NULL, &rc);
-	if (hit5 == false) SDL_RenderCopy(Renderer, emptyheart, NULL, &rc);
 
 	P1hp2.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
 	SDL_RenderCopy(Renderer, heart, NULL, &rc);
-	if(hit2==false) SDL_RenderCopy(Renderer, emptyheart, NULL, &rc);
+	if (hit2 == false) SDL_RenderCopy(Renderer, emptyheart, NULL, &rc);
 
 	P1hp3.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
 	SDL_RenderCopy(Renderer, heart, NULL, &rc);
-	if (hit1==false) SDL_RenderCopy(Renderer, emptyheart, NULL, &rc);
+	if (hit1 == false) SDL_RenderCopy(Renderer, emptyheart, NULL, &rc);
 
 	P2hp1.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
 	SDL_RenderCopy(Renderer, heart, NULL, &rc);
-	if (hit6 == false) SDL_RenderCopy(Renderer, emptyheart, NULL, &rc);
+
 
 	P2hp2.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
 	SDL_RenderCopy(Renderer, heart, NULL, &rc);
-	if (hit4==false) SDL_RenderCopy(Renderer, emptyheart, NULL, &rc);
+	if (hit4 == false) SDL_RenderCopy(Renderer, emptyheart, NULL, &rc);
 
 	P2hp3.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
 	SDL_RenderCopy(Renderer, heart, NULL, &rc);
-	if (hit3==false) SDL_RenderCopy(Renderer, emptyheart, NULL, &rc);
+	if (hit3 == false) SDL_RenderCopy(Renderer, emptyheart, NULL, &rc);
 
 	//Draw shots
 	SDL_SetRenderDrawColor(Renderer, 192, 0, 0, 255);
@@ -435,7 +466,7 @@ void Game::Draw()
 		if (Shotstop[i].IsAlive())
 		{
 			Shotstop[i].GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
-			SDL_RenderFillRect(Renderer, &rc);
+			SDL_RenderCopy(Renderer, bulletup, NULL, &rc);
 		}
 	}
 	for (int i = 0; i < MAX_SHOTS1; ++i)
@@ -443,7 +474,7 @@ void Game::Draw()
 		if (Shotsbot[i].IsAlive())
 		{
 			Shotsbot[i].GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
-			SDL_RenderFillRect(Renderer, &rc);
+			SDL_RenderCopy(Renderer, bulletdw, NULL, &rc);
 		}
 	}
 	for (int i = 0; i < MAX_SHOTS1; ++i)
@@ -451,7 +482,7 @@ void Game::Draw()
 		if (Shotsleft[i].IsAlive())
 		{
 			Shotsleft[i].GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
-			SDL_RenderFillRect(Renderer, &rc);
+			SDL_RenderCopy(Renderer, bulletle, NULL, &rc);
 		}
 	}
 	for (int i = 0; i < MAX_SHOTS1; ++i)
@@ -459,7 +490,7 @@ void Game::Draw()
 		if (Shotsright[i].IsAlive())
 		{
 			Shotsright[i].GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
-			SDL_RenderFillRect(Renderer, &rc);
+			SDL_RenderCopy(Renderer, bulletri, NULL, &rc);
 		}
 	}
 	//Player 2 Shots
@@ -469,7 +500,7 @@ void Game::Draw()
 		if (Shotstop2[i].IsAlive())
 		{
 			Shotstop2[i].GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
-			SDL_RenderFillRect(Renderer, &rc);
+			SDL_RenderCopy(Renderer, bulletup, NULL, &rc);
 		}
 	}
 	for (int i = 0; i < MAX_SHOTS2; ++i)
@@ -477,7 +508,7 @@ void Game::Draw()
 		if (Shotsbot2[i].IsAlive())
 		{
 			Shotsbot2[i].GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
-			SDL_RenderFillRect(Renderer, &rc);
+			SDL_RenderCopy(Renderer, bulletdw, NULL, &rc);
 		}
 	}
 	for (int i = 0; i < MAX_SHOTS2; ++i)
@@ -485,7 +516,7 @@ void Game::Draw()
 		if (Shotsleft2[i].IsAlive())
 		{
 			Shotsleft2[i].GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
-			SDL_RenderFillRect(Renderer, &rc);
+			SDL_RenderCopy(Renderer, bulletle, NULL, &rc);
 		}
 	}
 	for (int i = 0; i < MAX_SHOTS2; ++i)
@@ -493,7 +524,7 @@ void Game::Draw()
 		if (Shotsright2[i].IsAlive())
 		{
 			Shotsright2[i].GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
-			SDL_RenderFillRect(Renderer, &rc);
+			SDL_RenderCopy(Renderer, bulletri, NULL, &rc);
 		}
 	}
 
