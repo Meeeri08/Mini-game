@@ -48,6 +48,9 @@ private:
 	int counter1 = 0;
 	int counter2 = 0;
 
+	//Winscreen titles
+	const char *titles[2] = { "Player 1 Wins!","Player 2 Wins!" };
+
 	enum KEY_STATE { KEY_IDLE, KEY_DOWN, KEY_REPEAT, KEY_UP	};
 	KEY_STATE keys[MAX_KEYS]; 
 };

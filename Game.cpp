@@ -353,9 +353,15 @@ bool Game::Update()
 		hit4 = false;
 	}
 	if (p1hp == 0) {
+		SDL_SetWindowTitle(Window, titles[1]);
+		SDL_Delay(5000);
+		SDL_DestroyWindow(Window);
 		SDL_Quit();
 	}
 	if (p2hp == 0) {
+		SDL_SetWindowTitle(Window, titles[0]);
+		SDL_Delay(5000);
+		SDL_DestroyWindow(Window);
 		SDL_Quit();
 	}
 	
