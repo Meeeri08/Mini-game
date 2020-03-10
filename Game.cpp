@@ -76,23 +76,26 @@ bool Game::LoadImages()
 		return false;
 	}
 
-	/*img_shot = SDL_CreateTextureFromSurface(Renderer, IMG_Load("shot.png"));
-	if (img_shot == NULL) {
+	heart = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Assets/life2.png"));
+	if (heart == NULL) {
 		SDL_Log("CreateTextureFromSurface failed: %s\n", SDL_GetError());
 		return false;
 	}
-	img_shot = SDL_CreateTextureFromSurface(Renderer, IMG_Load("shot.png"));
-	if (img_shot == NULL) {
+	emptyheart = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Assets/emptylife2.png"));
+	if (emptyheart == NULL) {
 		SDL_Log("CreateTextureFromSurface failed: %s\n", SDL_GetError());
-		return false;*/
-	return true;
-}
+		return false;
+	}
+		return true;
+	}
+
 void Game::Release()
 {
 	//Release images
-	//SDL_DestroyTexture(img_background);
+	SDL_DestroyTexture(player2);
 	SDL_DestroyTexture(player1);
-	//SDL_DestroyTexture(img_shot);
+	SDL_DestroyTexture(heart);
+	SDL_DestroyTexture(emptyheart);
 	IMG_Quit();
 
 	//Clean up all SDL initialized subsystems
@@ -375,39 +378,25 @@ void Game::Draw()
 	Player2.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
 	SDL_RenderCopy(Renderer, player2, NULL, &rc);
 
-	//Draw Player 2
-	/*SDL_Rect rc2;
-	Player2.GetRect(&rc2.x, &rc2.y, &rc2.w, &rc2.h);
-	SDL_SetRenderDrawColor(Renderer, 110, 192, 110, 255);
-	SDL_RenderFillRect(Renderer, &rc2);*/
+	//Draw Lifes
 
-	
+	P1hp1.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
+	SDL_RenderCopy(Renderer, heart, NULL, &rc);
 
-	//Player's HP
-	/*P1hp1.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
-	SDL_SetRenderDrawColor(Renderer, 255, 0, 0, 0);
-	SDL_RenderFillRect(Renderer, &rc);
-	
-	
 	P1hp2.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
-	SDL_SetRenderDrawColor(Renderer, 255, 0, 0, 0);
-	SDL_RenderFillRect(Renderer, &rc);
-	
+	SDL_RenderCopy(Renderer, heart, NULL, &rc);
+
 	P1hp3.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
-	SDL_SetRenderDrawColor(Renderer, 255, 0, 0, 0);
-	SDL_RenderFillRect(Renderer, &rc);
+	SDL_RenderCopy(Renderer, heart, NULL, &rc);
 
 	P2hp1.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
-	SDL_SetRenderDrawColor(Renderer, 255, 0, 0, 0);
-	SDL_RenderFillRect(Renderer, &rc);
+	SDL_RenderCopy(Renderer, heart, NULL, &rc);
 
 	P2hp2.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
-	SDL_SetRenderDrawColor(Renderer, 255, 0, 0, 0);
-	SDL_RenderFillRect(Renderer, &rc);
-		
+	SDL_RenderCopy(Renderer, heart, NULL, &rc);
+
 	P2hp3.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
-	SDL_SetRenderDrawColor(Renderer, 255, 0, 0, 0);
-	SDL_RenderFillRect(Renderer, &rc);*/
+	SDL_RenderCopy(Renderer, heart, NULL, &rc);
 
 
 	//Draw shots
