@@ -34,6 +34,7 @@ bool Game::Init()
 	//Load images
 	if (!LoadImages())
 		return false;
+
 	//AUDIO
 	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
 	music = Mix_LoadMUS("spaece.ogg");

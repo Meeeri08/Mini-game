@@ -1,4 +1,5 @@
-﻿  Game.cpp
+﻿  Entity.cpp
+  Game.cpp
   main.cpp
   Generando código...
-  SpriteSDL.vcxproj -> C:\Users\adell\Documents\GitHub\Mini-game\Debug\SpriteSDL.exe
+  SpriteSDL.vcxproj -> C:\Users\Maria\Documents\GitHub\Mini-game\Debug\SpriteSDL.exe
