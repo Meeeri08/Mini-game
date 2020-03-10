@@ -30,7 +30,7 @@ bool Game::Init()
 		keys[i] = KEY_IDLE;
 
 	//Init variables
-	Player.Init(20, WINDOW_HEIGHT >> 1, 104, 82, 5);
+	Player.Init(375, 850, 104, 82, 5);
 	idx_shot = 0;
 
 	return true;
