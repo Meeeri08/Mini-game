@@ -81,7 +81,7 @@ bool Game::Update()
 	{
 		int x, y, w, h;
 		Player.GetRect(&x, &y, &w, &h);
-		Shots[idx_shot].Init(x + w - 10, y + (h >> 1) - 5, 56, 20, 10);
+		Shots[idx_shot].Init(x + w/2 - 13, y + h/2 - 80, 20, 56, 10);
 		idx_shot++;
 		idx_shot %= MAX_SHOTS;
 	}
@@ -94,7 +94,7 @@ bool Game::Update()
 	{
 		if (Shots[i].IsAlive())
 		{
-			Shots[i].Move(1, 0);
+			Shots[i].Move(0, -1);
 			if (Shots[i].GetX() > WINDOW_WIDTH)	Shots[i].ShutDown();
 		}
 	}
