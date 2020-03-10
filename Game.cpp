@@ -145,7 +145,7 @@ bool Game::Update()
 	{
 		int x, y, w, h;
 		Player.GetRect(&x, &y, &w, &h);
-		Shotsright[idx_shot].Init(x + w/2-13, y + h / 2 -20, 56, 20, 10);
+		Shotsright[idx_shot].Init(x + w/2-13, y + h / 2 -20, 56, 20, 20);
 		idx_shot++;
 		idx_shot %= MAX_SHOTS1;
 	}
@@ -153,7 +153,7 @@ bool Game::Update()
 	{
 		int x, y, w, h;
 		Player.GetRect(&x, &y, &w, &h);
-		Shotsbot[idx_shot].Init(x + w/2 - 13, y + h/2 - 20, 20, 56, 10);
+		Shotsbot[idx_shot].Init(x + w/2 - 13, y + h/2 - 20, 20, 56, 20);
 		idx_shot++;
 		idx_shot %= MAX_SHOTS1;
 	}
@@ -161,7 +161,7 @@ bool Game::Update()
 	{
 		int x, y, w, h;
 		Player.GetRect(&x, &y, &w, &h);
-		Shotsleft[idx_shot].Init(x + w / 2 - 13, y + h / 2 - 20, 56, 20, 10);
+		Shotsleft[idx_shot].Init(x + w / 2 - 13, y + h / 2 - 20, 56, 20, 20);
 		idx_shot++;
 		idx_shot %= MAX_SHOTS1;
 	}
@@ -169,7 +169,7 @@ bool Game::Update()
 	{
 		int x, y, w, h;
 		Player.GetRect(&x, &y, &w, &h);
-		Shotstop[idx_shot].Init(x + w / 2 - 13, y + h / 2 -20, 20, 56, 10);
+		Shotstop[idx_shot].Init(x + w / 2 - 13, y + h / 2 -20, 20, 56, 20);
 		idx_shot++;
 		idx_shot %= MAX_SHOTS1;
 	}
@@ -185,7 +185,7 @@ bool Game::Update()
 	{
 		int x, y, w, h;
 		Player2.GetRect(&x, &y, &w, &h);
-		Shotsright2[idx_shot2].Init(x + w / 2 - 13, y + h / 2 - 20, 56, 20, 10);
+		Shotsright2[idx_shot2].Init(x + w / 2 - 13, y + h / 2 - 20, 56, 20, 20);
 		idx_shot2++;
 		idx_shot2 %= MAX_SHOTS2;
 	}
@@ -193,7 +193,7 @@ bool Game::Update()
 	{
 		int x, y, w, h;
 		Player2.GetRect(&x, &y, &w, &h);
-		Shotsbot2[idx_shot2].Init(x + w / 2 - 13, y + h / 2 - 20, 20, 56, 10);
+		Shotsbot2[idx_shot2].Init(x + w / 2 - 13, y + h / 2 - 20, 20, 56, 20);
 		idx_shot2++;
 		idx_shot2 %= MAX_SHOTS2;
 	}
@@ -201,7 +201,7 @@ bool Game::Update()
 	{
 		int x, y, w, h;
 		Player2.GetRect(&x, &y, &w, &h);
-		Shotsleft2[idx_shot2].Init(x + w / 2, y + h / 2 - 20, 56, 20, 10);
+		Shotsleft2[idx_shot2].Init(x + w / 2, y + h / 2 - 20, 56, 20, 20);
 		idx_shot2++;
 		idx_shot2 %= MAX_SHOTS2;
 	}
@@ -209,7 +209,7 @@ bool Game::Update()
 	{
 		int x, y, w, h;
 		Player2.GetRect(&x, &y, &w, &h);
-		Shotstop2[idx_shot2].Init(x + w / 2 - 13, y + h / 2 - 20, 20, 56, 10);
+		Shotstop2[idx_shot2].Init(x + w / 2 - 13, y + h / 2 - 20, 20, 56, 20);
 		idx_shot2++;
 		idx_shot2 %= MAX_SHOTS2;
 	}
