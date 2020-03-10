@@ -31,8 +31,14 @@ bool Game::Init()
 		keys[i] = KEY_IDLE;
 
 	//Init variables
-	Player.Init(375, 850, 104, 82, 5);
-	Player2.Init(600, 15, 104, 82, 5);
+	Player.Init(40, WINDOW_HEIGHT / 2, 104, 104, 5);
+	Player2.Init(WINDOW_WIDTH - 140, WINDOW_HEIGHT / 2, 104, 104, 5);
+	P1hp1.Init(0, 850, 50, 50, 0);
+	P1hp2.Init(80, 850, 50, 50, 0);
+	P1hp3.Init(160, 850, 50, 50, 0);
+	P2hp1.Init(1230, 850, 50, 50, 0);
+	P2hp2.Init(1150, 850, 50, 50, 0);
+	P2hp3.Init(1070, 850, 50, 50, 0);
 	idx_shot = 0;
 	idx_shot2 = 0;
 	p1hp = 3;
@@ -69,6 +75,7 @@ bool Game::Update()
 {
 	//Read Input
 	if (!Input())	return true;
+	
 	
 	//Process Input Player 1
 	int fx = 0, fy = 0;
@@ -276,13 +283,24 @@ bool Game::Update()
 		}
 	}
 
+	if (p1hp == 2) {
+		P1hp3.ShutDown();
+	}
+	if (p1hp == 1) {
+		P1hp2.ShutDown();
+	}
+	if (p2hp == 2) {
+		P2hp1.ShutDown();
+	}
+	if (p2hp == 1) {
+		P2hp2.ShutDown();
+	}
 	if (p1hp == 0) {
 		SDL_Quit();
 	}
 	if (p2hp == 0) {
 		SDL_Quit();
 	}
-		
 	
 	return false;
 }
@@ -304,6 +322,38 @@ void Game::Draw()
 	Player2.GetRect(&rc2.x, &rc2.y, &rc2.w, &rc2.h);
 	SDL_SetRenderDrawColor(Renderer, 110, 192, 110, 255);
 	SDL_RenderFillRect(Renderer, &rc2);
+
+	//Player's HP
+	SDL_Rect hp1;
+	P1hp1.GetRect(&hp1.x, &hp1.y, &hp1.w, &hp1.h);
+	SDL_SetRenderDrawColor(Renderer, 255, 0, 0, 0);
+	SDL_RenderFillRect(Renderer, &hp1);
+	
+	SDL_Rect hp2;
+	P1hp2.GetRect(&hp2.x, &hp2.y, &hp2.w, &hp2.h);
+	SDL_SetRenderDrawColor(Renderer, 255, 0, 0, 0);
+	SDL_RenderFillRect(Renderer, &hp2);
+	
+	SDL_Rect hp3;
+	P1hp3.GetRect(&hp3.x, &hp3.y, &hp3.w, &hp3.h);
+	SDL_SetRenderDrawColor(Renderer, 255, 0, 0, 0);
+	SDL_RenderFillRect(Renderer, &hp3);
+
+	SDL_Rect hp4;
+	P2hp1.GetRect(&hp4.x, &hp4.y, &hp4.w, &hp4.h);
+	SDL_SetRenderDrawColor(Renderer, 255, 0, 0, 0);
+	SDL_RenderFillRect(Renderer, &hp4);
+
+	SDL_Rect hp5;
+	P2hp2.GetRect(&hp5.x, &hp5.y, &hp5.w, &hp5.h);
+	SDL_SetRenderDrawColor(Renderer, 255, 0, 0, 0);
+	SDL_RenderFillRect(Renderer, &hp5);
+
+	SDL_Rect hp6;
+	P2hp3.GetRect(&hp6.x, &hp6.y, &hp6.w, &hp6.h);
+	SDL_SetRenderDrawColor(Renderer, 255, 0, 0, 0);
+	SDL_RenderFillRect(Renderer, &hp6);
+
 
 	//Draw shots
 	SDL_SetRenderDrawColor(Renderer, 192, 0, 0, 255);
