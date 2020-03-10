@@ -11,7 +11,8 @@
 #define WINDOW_WIDTH	1280
 #define WINDOW_HEIGHT	960
 #define MAX_KEYS		256
-#define MAX_SHOTS		32
+#define MAX_SHOTS1		3
+#define MAX_SHOTS2		3
 
 class Game
 {
@@ -30,11 +31,10 @@ private:
 	SDL_Window *Window;
 	SDL_Renderer *Renderer;
 
-	Entity Player, Shots[MAX_SHOTS], Enemy;
+	Entity Player, Shotstop[MAX_SHOTS1], Shotsbot[MAX_SHOTS1], Shotsleft[MAX_SHOTS1], Shotsright[MAX_SHOTS1], Player2, Shotstop2[MAX_SHOTS2], Shotsbot2[MAX_SHOTS1], Shotsleft2[MAX_SHOTS2], Shotsright2[MAX_SHOTS2];
 	int idx_shot;
-
-	int posx;
-	int posy;
+	int idx_shot2;
+		
 
 	enum KEY_STATE { KEY_IDLE, KEY_DOWN, KEY_REPEAT, KEY_UP	};
 	KEY_STATE keys[MAX_KEYS]; 

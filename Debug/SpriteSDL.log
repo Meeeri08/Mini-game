@@ -1,4 +1,2 @@
 ﻿  Game.cpp
-C:\Users\adell\Documents\GitHub\Mini-game\Game.cpp(108,16): warning C4244: 'argumento': conversión de 'double' a 'int'; posible pérdida de datos
-C:\Users\adell\Documents\GitHub\Mini-game\Game.cpp(109,13): warning C4244: 'argumento': conversión de 'double' a 'int'; posible pérdida de datos
   SpriteSDL.vcxproj -> C:\Users\adell\Documents\GitHub\Mini-game\Debug\SpriteSDL.exe

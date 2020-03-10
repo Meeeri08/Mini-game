@@ -31,9 +31,9 @@ bool Game::Init()
 
 	//Init variables
 	Player.Init(375, 850, 104, 82, 5);
-	Enemy.Init(0,50, 50, 50, 1);
+	Player2.Init(600, 15, 104, 82, 5);
 	idx_shot = 0;
-
+	idx_shot2 = 0;
 
 	return true;
 }
@@ -67,51 +67,163 @@ bool Game::Update()
 	//Read Input
 	if (!Input())	return true;
 	
-	//Read Player position
-	posx = Player.GetX();
-
-	//Process Input
+	//Process Input Player 1
 	int fx = 0, fy = 0;
 	if (keys[SDL_SCANCODE_ESCAPE] == KEY_DOWN)	return true;
-	if (keys[SDL_SCANCODE_LEFT] == KEY_REPEAT && posx >= 0)	fx = -1;
-	if (keys[SDL_SCANCODE_RIGHT] == KEY_REPEAT && posx < 1280-104)	fx = 1;
-	if (keys[SDL_SCANCODE_SPACE] == KEY_DOWN)
+	if (keys[SDL_SCANCODE_A] == KEY_REPEAT && Player.GetX() >= 0)	fx = -1;
+	if (keys[SDL_SCANCODE_D] == KEY_REPEAT && Player.GetX() < 1280-104)	fx = 1;
+	if (keys[SDL_SCANCODE_W] == KEY_REPEAT && Player.GetY() >= 0)	fy = -1;
+	if (keys[SDL_SCANCODE_S] == KEY_REPEAT && Player.GetY() < 960 - 82)	fy = 1;
+	if (keys[SDL_SCANCODE_K] == KEY_DOWN)
 	{
 		int x, y, w, h;
 		Player.GetRect(&x, &y, &w, &h);
+		Shotsright[idx_shot].Init(x + w / 2 - 13, y + h / 2 - 80, 56, 20, 10);
 		idx_shot++;
-		idx_shot %= MAX_SHOTS;
+		idx_shot %= MAX_SHOTS1;
 	}
-	if (keys[SDL_SCANCODE_SPACE] == KEY_DOWN)
+	if (keys[SDL_SCANCODE_J] == KEY_DOWN)
 	{
 		int x, y, w, h;
 		Player.GetRect(&x, &y, &w, &h);
-		Shots[idx_shot].Init(x + w/2 - 13, y + h/2 - 80, 20, 56, 10);
+		Shotsbot[idx_shot].Init(x + w/2 - 13, y + h/2 - 80, 20, 56, 10);
 		idx_shot++;
-		idx_shot %= MAX_SHOTS;
+		idx_shot %= MAX_SHOTS1;
+	}
+	if (keys[SDL_SCANCODE_H] == KEY_DOWN)
+	{
+		int x, y, w, h;
+		Player.GetRect(&x, &y, &w, &h);
+		Shotsleft[idx_shot].Init(x + w / 2 - 13, y + h / 2 - 80, 56, 20, 10);
+		idx_shot++;
+		idx_shot %= MAX_SHOTS1;
+	}
+	if (keys[SDL_SCANCODE_U] == KEY_DOWN)
+	{
+		int x, y, w, h;
+		Player.GetRect(&x, &y, &w, &h);
+		Shotstop[idx_shot].Init(x + w / 2 - 13, y + h / 2 -15, 20, 56, 10);
+		idx_shot++;
+		idx_shot %= MAX_SHOTS1;
+	}
+
+	//Process imput player 2
+	int fx2 = 0, fy2 = 0;
+	if (keys[SDL_SCANCODE_ESCAPE] == KEY_DOWN)	return true;
+	if (keys[SDL_SCANCODE_LEFT] == KEY_REPEAT && Player2.GetX() >= 0)	fx2 = -1;
+	if (keys[SDL_SCANCODE_RIGHT] == KEY_REPEAT && Player2.GetX() < 1280 - 104)	fx2 = 1;
+	if (keys[SDL_SCANCODE_UP] == KEY_REPEAT && Player2.GetY() >= 0)	fy2 = -1;
+	if (keys[SDL_SCANCODE_DOWN] == KEY_REPEAT && Player2.GetY() < 960 - 82)	fy2 = 1;
+	if (keys[SDL_SCANCODE_KP_6] == KEY_DOWN)
+	{
+		int x, y, w, h;
+		Player2.GetRect(&x, &y, &w, &h);
+		Shotsright2[idx_shot2].Init(x + w / 2 - 13, y + h / 2 - 80, 56, 20, 10);
+		idx_shot2++;
+		idx_shot2 %= MAX_SHOTS2;
+	}
+	if (keys[SDL_SCANCODE_KP_5] == KEY_DOWN)
+	{
+		int x, y, w, h;
+		Player2.GetRect(&x, &y, &w, &h);
+		Shotsbot2[idx_shot2].Init(x + w / 2 - 13, y + h / 2 - 80, 20, 56, 10);
+		idx_shot2++;
+		idx_shot2 %= MAX_SHOTS2;
+	}
+	if (keys[SDL_SCANCODE_KP_4] == KEY_DOWN)
+	{
+		int x, y, w, h;
+		Player2.GetRect(&x, &y, &w, &h);
+		Shotsleft2[idx_shot2].Init(x + w / 2 - 13, y + h / 2 - 80, 56, 20, 10);
+		idx_shot2++;
+		idx_shot2 %= MAX_SHOTS2;
+	}
+	if (keys[SDL_SCANCODE_KP_8] == KEY_DOWN)
+	{
+		int x, y, w, h;
+		Player2.GetRect(&x, &y, &w, &h);
+		Shotstop2[idx_shot2].Init(x + w / 2 - 13, y + h / 2 - 15, 20, 56, 10);
+		idx_shot2++;
+		idx_shot2 %= MAX_SHOTS2;
 	}
 
 	//Logic
 	//Player update
+	
 	Player.Move(fx, fy);
+	Player2.Move(fx2, fy2);
+
 	//Shots update
-	for (int i = 0; i < MAX_SHOTS; ++i)
+	//Player One shots update
+	
+	for (int i = 0; i < MAX_SHOTS2; ++i)
 	{
-		if (Shots[i].IsAlive())
+		if (Shotstop[i].IsAlive())
 		{
-			Shots[i].Move(0, -1);
-			if (Shots[i].GetX() > WINDOW_WIDTH)	Shots[i].ShutDown();
+		Shotstop[i].Move(0, -1);
+		if (Shotstop[i].GetX() > WINDOW_WIDTH)	Shotstop[i].ShutDown();
 		}
 	}
-	
-	//Enemy Behaviour
-	Enemy.Move(0, 1.5);
-	Enemy.Move(1.5, 0);
-	//Enemy.Move(-1.5, 0);
-	
+	for (int i = 0; i < MAX_SHOTS1; ++i)
+	{
+		if (Shotsbot[i].IsAlive())
+		{
+			Shotsbot[i].Move(0, 1);
+			if (Shotsbot[i].GetX() > WINDOW_WIDTH)	Shotsbot[i].ShutDown();
+		}
+	}
+	for (int i = 0; i < MAX_SHOTS1; ++i)
+	{
+		if (Shotsleft[i].IsAlive())
+		{
+			Shotsleft[i].Move(-1, 0);
+			if (Shotsleft[i].GetX() > WINDOW_WIDTH)	Shotsleft[i].ShutDown();
+		}
+	}
+	for (int i = 0; i < MAX_SHOTS1; ++i)
+	{
+		if (Shotsright[i].IsAlive())
+		{
+			Shotsright[i].Move(1, 0);
+			if (Shotsright[i].GetX() > WINDOW_WIDTH)	Shotsright[i].ShutDown();
+		}
+	}
+	//Player 2 shots update
+	for (int i = 0; i < MAX_SHOTS2; ++i)
+	{
+		if (Shotstop2[i].IsAlive())
+		{
+			Shotstop2[i].Move(0, -1);
+			if (Shotstop2[i].GetX() > WINDOW_WIDTH)	Shotstop2[i].ShutDown();
+		}
+	}
+	for (int i = 0; i < MAX_SHOTS2; ++i)
+	{
+		if (Shotsbot2[i].IsAlive())
+		{
+			Shotsbot2[i].Move(0, 1);
+			if (Shotsbot2[i].GetX() > WINDOW_WIDTH)	Shotsbot2[i].ShutDown();
+		}
+	}
+	for (int i = 0; i < MAX_SHOTS2; ++i)
+	{
+		if (Shotsleft2[i].IsAlive())
+		{
+			Shotsleft2[i].Move(-1, 0);
+			if (Shotsleft2[i].GetX() > WINDOW_WIDTH)	Shotsleft2[i].ShutDown();
+		}
+	}
+	for (int i = 0; i < MAX_SHOTS2; ++i)
+	{
+		if (Shotsright2[i].IsAlive())
+		{
+			Shotsright2[i].Move(1, 0);
+			if (Shotsright2[i].GetX() > WINDOW_WIDTH)	Shotsright2[i].ShutDown();
+		}
+	}
 
-	//Collision manager
-
+		
+	
 
 	return false;
 }
@@ -128,19 +240,77 @@ void Game::Draw()
 	SDL_SetRenderDrawColor(Renderer, 0, 192, 0, 255);
 	SDL_RenderFillRect(Renderer, &rc);
 
-	//Draw enemies
-	SDL_Rect ec;
-	Enemy.GetRect(&ec.x, &ec.y, &ec.w, &ec.h);
-	SDL_SetRenderDrawColor(Renderer, 100, 192, 0, 255);
-	SDL_RenderFillRect(Renderer, &ec);
-	
+	//Draw Player 2
+	SDL_Rect rc2;
+	Player2.GetRect(&rc2.x, &rc2.y, &rc2.w, &rc2.h);
+	SDL_SetRenderDrawColor(Renderer, 110, 192, 110, 255);
+	SDL_RenderFillRect(Renderer, &rc2);
+
 	//Draw shots
 	SDL_SetRenderDrawColor(Renderer, 192, 0, 0, 255);
-	for (int i = 0; i < MAX_SHOTS; ++i)
+	for (int i = 0; i < MAX_SHOTS1; ++i)
 	{
-		if (Shots[i].IsAlive())
+		if (Shotstop[i].IsAlive())
 		{
-			Shots[i].GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
+			Shotstop[i].GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
+			SDL_RenderFillRect(Renderer, &rc);
+		}
+	}
+	for (int i = 0; i < MAX_SHOTS1; ++i)
+	{
+		if (Shotsbot[i].IsAlive())
+		{
+			Shotsbot[i].GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
+			SDL_RenderFillRect(Renderer, &rc);
+		}
+	}
+	for (int i = 0; i < MAX_SHOTS1; ++i)
+	{
+		if (Shotsleft[i].IsAlive())
+		{
+			Shotsleft[i].GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
+			SDL_RenderFillRect(Renderer, &rc);
+		}
+	}
+	for (int i = 0; i < MAX_SHOTS1; ++i)
+	{
+		if (Shotsright[i].IsAlive())
+		{
+			Shotsright[i].GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
+			SDL_RenderFillRect(Renderer, &rc);
+		}
+	}
+	//Player 2 Shots
+	SDL_SetRenderDrawColor(Renderer, 100, 0, 100, 0);
+	for (int i = 0; i < MAX_SHOTS2; ++i)
+	{
+		if (Shotstop2[i].IsAlive())
+		{
+			Shotstop2[i].GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
+			SDL_RenderFillRect(Renderer, &rc);
+		}
+	}
+	for (int i = 0; i < MAX_SHOTS2; ++i)
+	{
+		if (Shotsbot2[i].IsAlive())
+		{
+			Shotsbot2[i].GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
+			SDL_RenderFillRect(Renderer, &rc);
+		}
+	}
+	for (int i = 0; i < MAX_SHOTS2; ++i)
+	{
+		if (Shotsleft2[i].IsAlive())
+		{
+			Shotsleft2[i].GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
+			SDL_RenderFillRect(Renderer, &rc);
+		}
+	}
+	for (int i = 0; i < MAX_SHOTS2; ++i)
+	{
+		if (Shotsright2[i].IsAlive())
+		{
+			Shotsright2[i].GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
 			SDL_RenderFillRect(Renderer, &rc);
 		}
 	}
