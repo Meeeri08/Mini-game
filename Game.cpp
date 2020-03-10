@@ -378,14 +378,16 @@ bool Game::Update()
 		hit4 = false;
 	}
 	if (p1hp == 0) {
+		hit5 = false;
 		SDL_SetWindowTitle(Window, titles[1]);
-		SDL_Delay(5000);
+		SDL_Delay(2500);
 		SDL_DestroyWindow(Window);
 		SDL_Quit();
 	}
 	if (p2hp == 0) {
+		hit6 = false;
 		SDL_SetWindowTitle(Window, titles[0]);
-		SDL_Delay(5000);
+		SDL_Delay(2500);
 		SDL_DestroyWindow(Window);
 		SDL_Quit();
 	}
@@ -416,6 +418,7 @@ void Game::Draw()
 
 	P1hp1.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
 	SDL_RenderCopy(Renderer, heart, NULL, &rc);
+	if (hit5 == false) SDL_RenderCopy(Renderer, emptyheart, NULL, &rc);
 
 	P1hp2.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
 	SDL_RenderCopy(Renderer, heart, NULL, &rc);
@@ -427,7 +430,7 @@ void Game::Draw()
 
 	P2hp1.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
 	SDL_RenderCopy(Renderer, heart, NULL, &rc);
-	
+	if (hit6 == false) SDL_RenderCopy(Renderer, emptyheart, NULL, &rc);
 
 	P2hp2.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
 	SDL_RenderCopy(Renderer, heart, NULL, &rc);

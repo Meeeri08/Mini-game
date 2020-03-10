@@ -40,6 +40,8 @@ private:
 	bool hit2 = true; 
 	bool hit3 = true;
 	bool hit4 = true;
+	bool hit5 = true;
+	bool hit6 = true;
 
 	int idx_shot;
 	int idx_shot2;
