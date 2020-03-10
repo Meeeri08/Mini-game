@@ -8,6 +8,7 @@ public:
 	void Init(int posx, int posy, int w, int h, int s);
 	void GetRect(int *posx, int *posy, int *w, int *h);
 	int  GetX();
+	int  GetY();
 	void ShutDown(); 
 	bool IsAlive();
 	void Move(int dx, int dy);

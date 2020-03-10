@@ -30,7 +30,7 @@ private:
 	SDL_Window *Window;
 	SDL_Renderer *Renderer;
 
-	Entity Player, Shots[MAX_SHOTS];
+	Entity Player, Shots[MAX_SHOTS], Enemy;
 	int idx_shot;
 
 	int posx;

@@ -31,7 +31,9 @@ bool Game::Init()
 
 	//Init variables
 	Player.Init(375, 850, 104, 82, 5);
+	Enemy.Init(0,50, 50, 50, 1);
 	idx_shot = 0;
+
 
 	return true;
 }
@@ -101,7 +103,16 @@ bool Game::Update()
 			if (Shots[i].GetX() > WINDOW_WIDTH)	Shots[i].ShutDown();
 		}
 	}
-		
+	
+	//Enemy Behaviour
+	Enemy.Move(0, 1.5);
+	Enemy.Move(1.5, 0);
+	//Enemy.Move(-1.5, 0);
+	
+
+	//Collision manager
+
+
 	return false;
 }
 void Game::Draw()
@@ -116,6 +127,12 @@ void Game::Draw()
 	Player.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
 	SDL_SetRenderDrawColor(Renderer, 0, 192, 0, 255);
 	SDL_RenderFillRect(Renderer, &rc);
+
+	//Draw enemies
+	SDL_Rect ec;
+	Enemy.GetRect(&ec.x, &ec.y, &ec.w, &ec.h);
+	SDL_SetRenderDrawColor(Renderer, 100, 192, 0, 255);
+	SDL_RenderFillRect(Renderer, &ec);
 	
 	//Draw shots
 	SDL_SetRenderDrawColor(Renderer, 192, 0, 0, 255);
@@ -133,3 +150,4 @@ void Game::Draw()
 
 	SDL_Delay(10);	// 1000/10 = 100 fps max
 }
+
