@@ -2,10 +2,13 @@
 
 #include "SDL_Image/include/SDL_image.h"
 #include "SDL/include/SDL.h"
+#include "SDL2_mixer-2.0.4/include/SDL_mixer.h"
+
 #pragma comment( lib, "SDL/libx86/SDL2.lib" )
 #pragma comment( lib, "SDL/libx86/SDL2main.lib" )
 #pragma comment(lib, "SDL_Image/libx86/SDL2_image.lib")
-
+#pragma comment( lib, "SDL2_mixer-2.0.4/lib/x86/SDL2_mixer.lib")
+#pragma comment( lib, "SDL_TTF/lib/x86/SDL2_ttf.lib")
 #include "Entity.h"
 
 #define WINDOW_WIDTH	1280
@@ -34,7 +37,9 @@ private:
 
 	Entity Player, Shotstop[MAX_SHOTS1], Shotsbot[MAX_SHOTS1], Shotsleft[MAX_SHOTS1], Shotsright[MAX_SHOTS1], Player2, Shotstop2[MAX_SHOTS2], Shotsbot2[MAX_SHOTS1], Shotsleft2[MAX_SHOTS2], Shotsright2[MAX_SHOTS2];
 	Entity P1hp1, P1hp2, P1hp3, P2hp1, P2hp2, P2hp3;
-	SDL_Texture* player1, * player2, * heart, * emptyheart, * bulletup, * bulletdw, * bulletri, * bulletle;
+	SDL_Texture* player1, * player2, * heart, * emptyheart;
+
+	Mix_Music* music = NULL;
 
 	bool hit1 = true;
 	bool hit2 = true; 
