@@ -1,6 +1,7 @@
 #include "Game.h"
 #include <math.h>
 #include <stdio.h>
+#include "SDL/include/SDL_Log.h"
 
 Game::Game() {}
 Game::~Game(){}
@@ -13,7 +14,7 @@ bool Game::Init()
 		return false;
 	}
 	//Create our window: title, x, y, w, h, flags
-	Window = SDL_CreateWindow("Spaceship: arrow keys + space", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
+	Window = SDL_CreateWindow("3 Shot Battle", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
 	if (Window == NULL)
 	{
 		SDL_Log("Unable to create window: %s", SDL_GetError());
@@ -29,10 +30,16 @@ bool Game::Init()
 	//Initialize keys array
 	for (int i = 0; i < MAX_KEYS; ++i)
 		keys[i] = KEY_IDLE;
+		
+	//Load images
+	if (!LoadImages())
+		return false;
+	
 
 	//Init variables
 	Player.Init(40, WINDOW_HEIGHT / 2, 104, 104, 5);
 	Player2.Init(WINDOW_WIDTH - 140, WINDOW_HEIGHT / 2, 104, 104, 5);
+	
 	P1hp1.Init(0, 850, 50, 50, 0);
 	P1hp2.Init(80, 850, 50, 50, 0);
 	P1hp3.Init(160, 850, 50, 50, 0);
@@ -46,11 +53,52 @@ bool Game::Init()
 
 	return true;
 }
+bool Game::LoadImages()
+{
+	if (IMG_Init(IMG_INIT_PNG) != IMG_INIT_PNG)
+	{
+		SDL_Log("IMG_Init, failed to init required png support: %s\n", IMG_GetError());
+		return false;
+	}
+	//img_background = SDL_CreateTextureFromSurface(Renderer, IMG_Load("background.png"));
+	/*if (img_background == NULL) {
+		SDL_Log("CreateTextureFromSurface failed: %s\n", SDL_GetError());
+		return false;
+	}*/
+	player1 = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Assets/Ufo.png"));
+	if (player1 == NULL) {
+		SDL_Log("CreateTextureFromSurface failed: %s\n", SDL_GetError());
+		return false;
+	}
+	player2 = SDL_CreateTextureFromSurface(Renderer, IMG_Load("Assets/Ufo2.png"));
+	if (player2 == NULL) {
+		SDL_Log("CreateTextureFromSurface failed: %s\n", SDL_GetError());
+		return false;
+	}
+
+	/*img_shot = SDL_CreateTextureFromSurface(Renderer, IMG_Load("shot.png"));
+	if (img_shot == NULL) {
+		SDL_Log("CreateTextureFromSurface failed: %s\n", SDL_GetError());
+		return false;
+	}
+	img_shot = SDL_CreateTextureFromSurface(Renderer, IMG_Load("shot.png"));
+	if (img_shot == NULL) {
+		SDL_Log("CreateTextureFromSurface failed: %s\n", SDL_GetError());
+		return false;*/
+	return true;
+}
 void Game::Release()
 {
+	//Release images
+	//SDL_DestroyTexture(img_background);
+	SDL_DestroyTexture(player1);
+	//SDL_DestroyTexture(img_shot);
+	IMG_Quit();
+
 	//Clean up all SDL initialized subsystems
 	SDL_Quit();
 }
+
 bool Game::Input()
 {
 	SDL_Event event;
@@ -70,9 +118,15 @@ bool Game::Input()
 	}
 
 	return true;
+
+
 }
+
+
+
 bool Game::Update()
 {
+
 	//Read Input
 	if (!Input())	return true;
 	
@@ -283,7 +337,7 @@ bool Game::Update()
 		}
 	}
 
-	if (p1hp == 2) {
+	if (p1hp == 2 && Player.IsAlive()) {
 		P1hp3.ShutDown();
 	}
 	if (p1hp == 1) {
@@ -306,53 +360,54 @@ bool Game::Update()
 }
 void Game::Draw()
 {
+	SDL_Rect rc;
+	
 	//Set the color used for drawing operations
 	SDL_SetRenderDrawColor(Renderer, 0, 0, 0, 255);
 	//Clear rendering target
 	SDL_RenderClear(Renderer);
 
-	//Draw player
-	SDL_Rect rc;
+	//Draw players
+	
 	Player.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
-	SDL_SetRenderDrawColor(Renderer, 0, 192, 0, 255);
-	SDL_RenderFillRect(Renderer, &rc);
+	SDL_RenderCopy(Renderer, player1, NULL, &rc);
+
+	Player2.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
+	SDL_RenderCopy(Renderer, player2, NULL, &rc);
 
 	//Draw Player 2
-	SDL_Rect rc2;
+	/*SDL_Rect rc2;
 	Player2.GetRect(&rc2.x, &rc2.y, &rc2.w, &rc2.h);
 	SDL_SetRenderDrawColor(Renderer, 110, 192, 110, 255);
-	SDL_RenderFillRect(Renderer, &rc2);
+	SDL_RenderFillRect(Renderer, &rc2);*/
+
+	
 
 	//Player's HP
-	SDL_Rect hp1;
-	P1hp1.GetRect(&hp1.x, &hp1.y, &hp1.w, &hp1.h);
+	/*P1hp1.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
 	SDL_SetRenderDrawColor(Renderer, 255, 0, 0, 0);
-	SDL_RenderFillRect(Renderer, &hp1);
+	SDL_RenderFillRect(Renderer, &rc);
 	
-	SDL_Rect hp2;
-	P1hp2.GetRect(&hp2.x, &hp2.y, &hp2.w, &hp2.h);
-	SDL_SetRenderDrawColor(Renderer, 255, 0, 0, 0);
-	SDL_RenderFillRect(Renderer, &hp2);
 	
-	SDL_Rect hp3;
-	P1hp3.GetRect(&hp3.x, &hp3.y, &hp3.w, &hp3.h);
+	P1hp2.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
 	SDL_SetRenderDrawColor(Renderer, 255, 0, 0, 0);
-	SDL_RenderFillRect(Renderer, &hp3);
+	SDL_RenderFillRect(Renderer, &rc);
+	
+	P1hp3.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
+	SDL_SetRenderDrawColor(Renderer, 255, 0, 0, 0);
+	SDL_RenderFillRect(Renderer, &rc);
 
-	SDL_Rect hp4;
-	P2hp1.GetRect(&hp4.x, &hp4.y, &hp4.w, &hp4.h);
+	P2hp1.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
 	SDL_SetRenderDrawColor(Renderer, 255, 0, 0, 0);
-	SDL_RenderFillRect(Renderer, &hp4);
+	SDL_RenderFillRect(Renderer, &rc);
 
-	SDL_Rect hp5;
-	P2hp2.GetRect(&hp5.x, &hp5.y, &hp5.w, &hp5.h);
+	P2hp2.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
 	SDL_SetRenderDrawColor(Renderer, 255, 0, 0, 0);
-	SDL_RenderFillRect(Renderer, &hp5);
-
-	SDL_Rect hp6;
-	P2hp3.GetRect(&hp6.x, &hp6.y, &hp6.w, &hp6.h);
+	SDL_RenderFillRect(Renderer, &rc);
+		
+	P2hp3.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
 	SDL_SetRenderDrawColor(Renderer, 255, 0, 0, 0);
-	SDL_RenderFillRect(Renderer, &hp6);
+	SDL_RenderFillRect(Renderer, &rc);*/
 
 
 	//Draw shots
