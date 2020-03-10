@@ -64,12 +64,15 @@ bool Game::Update()
 {
 	//Read Input
 	if (!Input())	return true;
+	
+	//Read Player position
+	posx = Player.GetX();
 
 	//Process Input
 	int fx = 0, fy = 0;
 	if (keys[SDL_SCANCODE_ESCAPE] == KEY_DOWN)	return true;
-	if (keys[SDL_SCANCODE_LEFT] == KEY_REPEAT)	fx = -1;
-	if (keys[SDL_SCANCODE_RIGHT] == KEY_REPEAT)	fx = 1;
+	if (keys[SDL_SCANCODE_LEFT] == KEY_REPEAT && posx >= 0)	fx = -1;
+	if (keys[SDL_SCANCODE_RIGHT] == KEY_REPEAT && posx < 1280-104)	fx = 1;
 	if (keys[SDL_SCANCODE_SPACE] == KEY_DOWN)
 	{
 		int x, y, w, h;
