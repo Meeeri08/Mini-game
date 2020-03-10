@@ -36,11 +36,17 @@ private:
 	Entity P1hp1, P1hp2, P1hp3, P2hp1, P2hp2, P2hp3;
 	SDL_Texture* player1, * player2, * heart, * emptyheart;
 
-	
+	bool hit1 = true;
+	bool hit2 = true; 
+	bool hit3 = true;
+	bool hit4 = true;
 
 	int idx_shot;
 	int idx_shot2;
 	int p1hp, p2hp;
+
+	int counter1 = 0;
+	int counter2 = 0;
 
 	enum KEY_STATE { KEY_IDLE, KEY_DOWN, KEY_REPEAT, KEY_UP	};
 	KEY_STATE keys[MAX_KEYS]; 

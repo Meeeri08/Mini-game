@@ -340,17 +340,17 @@ bool Game::Update()
 		}
 	}
 
-	if (p1hp == 2 && Player.IsAlive()) {
-		P1hp3.ShutDown();
+	if (p1hp == 2) {
+		hit1 = false;
 	}
 	if (p1hp == 1) {
-		P1hp2.ShutDown();
+		hit2 = false;
 	}
 	if (p2hp == 2) {
-		P2hp1.ShutDown();
+		hit3 = false;
 	}
 	if (p2hp == 1) {
-		P2hp2.ShutDown();
+		hit4 = false;
 	}
 	if (p1hp == 0) {
 		SDL_Quit();
@@ -359,12 +359,15 @@ bool Game::Update()
 		SDL_Quit();
 	}
 	
+
 	return false;
 }
 void Game::Draw()
 {
 	SDL_Rect rc;
 	
+	
+
 	//Set the color used for drawing operations
 	SDL_SetRenderDrawColor(Renderer, 0, 0, 0, 255);
 	//Clear rendering target
@@ -385,19 +388,23 @@ void Game::Draw()
 
 	P1hp2.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
 	SDL_RenderCopy(Renderer, heart, NULL, &rc);
+	if(hit2==false) SDL_RenderCopy(Renderer, emptyheart, NULL, &rc);
 
 	P1hp3.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
 	SDL_RenderCopy(Renderer, heart, NULL, &rc);
+	if (hit1==false) SDL_RenderCopy(Renderer, emptyheart, NULL, &rc);
 
 	P2hp1.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
 	SDL_RenderCopy(Renderer, heart, NULL, &rc);
+	
 
 	P2hp2.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
 	SDL_RenderCopy(Renderer, heart, NULL, &rc);
+	if (hit4==false) SDL_RenderCopy(Renderer, emptyheart, NULL, &rc);
 
 	P2hp3.GetRect(&rc.x, &rc.y, &rc.w, &rc.h);
 	SDL_RenderCopy(Renderer, heart, NULL, &rc);
-
+	if (hit3==false) SDL_RenderCopy(Renderer, emptyheart, NULL, &rc);
 
 	//Draw shots
 	SDL_SetRenderDrawColor(Renderer, 192, 0, 0, 255);
