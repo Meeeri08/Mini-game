@@ -1,5 +1,6 @@
 #include "Game.h"
 #include <math.h>
+#include <stdio.h>
 
 Game::Game() {}
 Game::~Game(){}
@@ -34,6 +35,8 @@ bool Game::Init()
 	Player2.Init(600, 15, 104, 82, 5);
 	idx_shot = 0;
 	idx_shot2 = 0;
+	p1hp = 3;
+	p2hp = 3;
 
 	return true;
 }
@@ -78,7 +81,7 @@ bool Game::Update()
 	{
 		int x, y, w, h;
 		Player.GetRect(&x, &y, &w, &h);
-		Shotsright[idx_shot].Init(x + w / 2 - 13, y + h / 2 - 80, 56, 20, 10);
+		Shotsright[idx_shot].Init(x + w/2-13, y + h / 2 -20, 56, 20, 10);
 		idx_shot++;
 		idx_shot %= MAX_SHOTS1;
 	}
@@ -86,7 +89,7 @@ bool Game::Update()
 	{
 		int x, y, w, h;
 		Player.GetRect(&x, &y, &w, &h);
-		Shotsbot[idx_shot].Init(x + w/2 - 13, y + h/2 - 80, 20, 56, 10);
+		Shotsbot[idx_shot].Init(x + w/2 - 13, y + h/2 - 20, 20, 56, 10);
 		idx_shot++;
 		idx_shot %= MAX_SHOTS1;
 	}
@@ -94,7 +97,7 @@ bool Game::Update()
 	{
 		int x, y, w, h;
 		Player.GetRect(&x, &y, &w, &h);
-		Shotsleft[idx_shot].Init(x + w / 2 - 13, y + h / 2 - 80, 56, 20, 10);
+		Shotsleft[idx_shot].Init(x + w / 2 - 13, y + h / 2 - 20, 56, 20, 10);
 		idx_shot++;
 		idx_shot %= MAX_SHOTS1;
 	}
@@ -102,7 +105,7 @@ bool Game::Update()
 	{
 		int x, y, w, h;
 		Player.GetRect(&x, &y, &w, &h);
-		Shotstop[idx_shot].Init(x + w / 2 - 13, y + h / 2 -15, 20, 56, 10);
+		Shotstop[idx_shot].Init(x + w / 2 - 13, y + h / 2 -20, 20, 56, 10);
 		idx_shot++;
 		idx_shot %= MAX_SHOTS1;
 	}
@@ -118,7 +121,7 @@ bool Game::Update()
 	{
 		int x, y, w, h;
 		Player2.GetRect(&x, &y, &w, &h);
-		Shotsright2[idx_shot2].Init(x + w / 2 - 13, y + h / 2 - 80, 56, 20, 10);
+		Shotsright2[idx_shot2].Init(x + w / 2 - 13, y + h / 2 - 20, 56, 20, 10);
 		idx_shot2++;
 		idx_shot2 %= MAX_SHOTS2;
 	}
@@ -126,7 +129,7 @@ bool Game::Update()
 	{
 		int x, y, w, h;
 		Player2.GetRect(&x, &y, &w, &h);
-		Shotsbot2[idx_shot2].Init(x + w / 2 - 13, y + h / 2 - 80, 20, 56, 10);
+		Shotsbot2[idx_shot2].Init(x + w / 2 - 13, y + h / 2 - 20, 20, 56, 10);
 		idx_shot2++;
 		idx_shot2 %= MAX_SHOTS2;
 	}
@@ -134,7 +137,7 @@ bool Game::Update()
 	{
 		int x, y, w, h;
 		Player2.GetRect(&x, &y, &w, &h);
-		Shotsleft2[idx_shot2].Init(x + w / 2 - 13, y + h / 2 - 80, 56, 20, 10);
+		Shotsleft2[idx_shot2].Init(x + w / 2, y + h / 2 - 20, 56, 20, 10);
 		idx_shot2++;
 		idx_shot2 %= MAX_SHOTS2;
 	}
@@ -142,7 +145,7 @@ bool Game::Update()
 	{
 		int x, y, w, h;
 		Player2.GetRect(&x, &y, &w, &h);
-		Shotstop2[idx_shot2].Init(x + w / 2 - 13, y + h / 2 - 15, 20, 56, 10);
+		Shotstop2[idx_shot2].Init(x + w / 2 - 13, y + h / 2 - 20, 20, 56, 10);
 		idx_shot2++;
 		idx_shot2 %= MAX_SHOTS2;
 	}
@@ -156,12 +159,18 @@ bool Game::Update()
 	//Shots update
 	//Player One shots update
 	
-	for (int i = 0; i < MAX_SHOTS2; ++i)
+	for (int i = 0; i < MAX_SHOTS1; ++i)
 	{
 		if (Shotstop[i].IsAlive())
 		{
 		Shotstop[i].Move(0, -1);
 		if (Shotstop[i].GetX() > WINDOW_WIDTH)	Shotstop[i].ShutDown();
+		if (Shotstop[i].GetX() <= Player2.GetX() + 104 && Shotstop[i].GetX() >= Player2.GetX() && Shotstop[i].GetY() <= Player2.GetY() + 82 && Shotstop[i].GetY() >= Player2.GetY())
+		{
+			//SDL_Quit();
+			Shotstop[i].ShutDown();
+			p2hp--;
+		}
 		}
 	}
 	for (int i = 0; i < MAX_SHOTS1; ++i)
@@ -170,6 +179,13 @@ bool Game::Update()
 		{
 			Shotsbot[i].Move(0, 1);
 			if (Shotsbot[i].GetX() > WINDOW_WIDTH)	Shotsbot[i].ShutDown();
+			if (Shotsbot[i].GetX() <= Player2.GetX() + 104 && Shotsbot[i].GetX() >= Player2.GetX() && Shotsbot[i].GetY() <= Player2.GetY() + 82 && Shotsbot[i].GetY() >= Player2.GetY())
+			{
+				//SDL_Quit();
+				Shotsbot[i].ShutDown();
+				p2hp--;
+			}
+
 		}
 	}
 	for (int i = 0; i < MAX_SHOTS1; ++i)
@@ -178,6 +194,12 @@ bool Game::Update()
 		{
 			Shotsleft[i].Move(-1, 0);
 			if (Shotsleft[i].GetX() > WINDOW_WIDTH)	Shotsleft[i].ShutDown();
+			if (Shotsleft[i].GetX() <= Player2.GetX() + 104 && Shotsleft[i].GetX() >= Player2.GetX() && Shotsleft[i].GetY() <= Player2.GetY() + 82 && Shotsleft[i].GetY() >= Player2.GetY())
+			{
+				//SDL_Quit();
+				Shotsleft[i].ShutDown();
+				p2hp--;
+			}
 		}
 	}
 	for (int i = 0; i < MAX_SHOTS1; ++i)
@@ -186,6 +208,12 @@ bool Game::Update()
 		{
 			Shotsright[i].Move(1, 0);
 			if (Shotsright[i].GetX() > WINDOW_WIDTH)	Shotsright[i].ShutDown();
+			if (Shotsright[i].GetX() <= Player2.GetX() + 104 && Shotsright[i].GetX() >= Player2.GetX() && Shotsright[i].GetY() <= Player2.GetY() + 82 && Shotsright[i].GetY() >= Player2.GetY())
+			{
+				//SDL_Quit();
+				Shotsright[i].ShutDown();
+				p2hp--;
+			}
 		}
 	}
 	//Player 2 shots update
@@ -195,7 +223,14 @@ bool Game::Update()
 		{
 			Shotstop2[i].Move(0, -1);
 			if (Shotstop2[i].GetX() > WINDOW_WIDTH)	Shotstop2[i].ShutDown();
+			if (Shotstop2[i].GetX() <= Player.GetX() + 104 && Shotstop2[i].GetX() >= Player.GetX() && Shotstop2[i].GetY() <= Player.GetY() + 82 && Shotstop2[i].GetY() >= Player.GetY())
+			{
+				//SDL_Quit();
+				Shotstop2[i].ShutDown();
+				p1hp--;
+			}
 		}
+		
 	}
 	for (int i = 0; i < MAX_SHOTS2; ++i)
 	{
@@ -203,6 +238,12 @@ bool Game::Update()
 		{
 			Shotsbot2[i].Move(0, 1);
 			if (Shotsbot2[i].GetX() > WINDOW_WIDTH)	Shotsbot2[i].ShutDown();
+			if (Shotsbot2[i].GetX() <= Player.GetX() + 104 && Shotsbot2[i].GetX() >= Player.GetX() && Shotsbot2[i].GetY() <= Player.GetY() + 82 && Shotsbot2[i].GetY() >= Player.GetY())
+			{
+				//SDL_Quit();
+				Shotsbot2[i].ShutDown();
+				p1hp--;
+			}
 		}
 	}
 	for (int i = 0; i < MAX_SHOTS2; ++i)
@@ -211,6 +252,12 @@ bool Game::Update()
 		{
 			Shotsleft2[i].Move(-1, 0);
 			if (Shotsleft2[i].GetX() > WINDOW_WIDTH)	Shotsleft2[i].ShutDown();
+			if (Shotsleft2[i].GetX() <= Player.GetX() + 104 && Shotsleft2[i].GetX() >= Player.GetX() && Shotsleft2[i].GetY() <= Player.GetY() + 82 && Shotsleft2[i].GetY() >= Player.GetY())
+			{
+				//SDL_Quit();
+				Shotsleft2[i].ShutDown();
+				p1hp--;
+			}
 		}
 	}
 	for (int i = 0; i < MAX_SHOTS2; ++i)
@@ -219,12 +266,24 @@ bool Game::Update()
 		{
 			Shotsright2[i].Move(1, 0);
 			if (Shotsright2[i].GetX() > WINDOW_WIDTH)	Shotsright2[i].ShutDown();
+			if (Shotsright2[i].GetX() <= Player.GetX() + 104 && Shotsright2[i].GetX() >= Player.GetX() && Shotsright2[i].GetY() <= Player.GetY() + 82 && Shotsright2[i].GetY() >= Player.GetY())
+			{
+				//SDL_Quit();
+				Shotsright2[i].ShutDown();
+				p1hp--;
+				
+			}
 		}
 	}
 
+	if (p1hp == 0) {
+		SDL_Quit();
+	}
+	if (p2hp == 0) {
+		SDL_Quit();
+	}
 		
 	
-
 	return false;
 }
 void Game::Draw()
